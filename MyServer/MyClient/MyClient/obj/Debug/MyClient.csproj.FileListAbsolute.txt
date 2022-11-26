@@ -1,0 +1,8 @@
+C:\Users\13491\Desktop\MyServer\MyClient\MyClient\bin\Debug\MyClient.exe.config
+C:\Users\13491\Desktop\MyServer\MyClient\MyClient\bin\Debug\MyClient.exe
+C:\Users\13491\Desktop\MyServer\MyClient\MyClient\bin\Debug\MyClient.pdb
+C:\Users\13491\Desktop\MyServer\MyClient\MyClient\obj\Debug\MyClient.csproj.AssemblyReference.cache
+C:\Users\13491\Desktop\MyServer\MyClient\MyClient\obj\Debug\MyClient.csproj.SuggestedBindingRedirects.cache
+C:\Users\13491\Desktop\MyServer\MyClient\MyClient\obj\Debug\MyClient.csproj.CoreCompileInputs.cache
+C:\Users\13491\Desktop\MyServer\MyClient\MyClient\obj\Debug\MyClient.exe
+C:\Users\13491\Desktop\MyServer\MyClient\MyClient\obj\Debug\MyClient.pdb
