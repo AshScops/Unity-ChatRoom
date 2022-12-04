@@ -45,7 +45,7 @@ namespace MyServer
             //异步接受客户端连接
             serverSocket.BeginAccept(AcceptCallBack, serverSocket);
 
-            Console.WriteLine("开始接受客户端连接");
+            Console.WriteLine("[开始接受客户端连接]");
         }
 
 
@@ -78,15 +78,7 @@ namespace MyServer
             Socket toClientsocket = serverSocket.EndAccept(ar);
             clientsList.Add(toClientsocket);
 
-            Console.WriteLine("客户端：{0}--已连接。", toClientsocket.RemoteEndPoint.ToString());
-            
-            //要向客户端发送的消息    
-            //string msg = "客户端:" + toClientsocket.RemoteEndPoint.ToString() + "--你好。";
-
-            //开始发送消息
-            //BeginSendMessagesToClient(toClientsocket, msg);
-
-            //Console.WriteLine("已向客户端{0}发送消息：{1}", toClientsocket.RemoteEndPoint.ToString(), msg);
+            Console.WriteLine("[客户端：{0}--已连接。]", toClientsocket.RemoteEndPoint.ToString());
 
             //开始接收客户端传来的消息
             BeginReceiveMessages(toClientsocket);
@@ -106,13 +98,14 @@ namespace MyServer
             {
                 toClientsocket = ar.AsyncState as Socket;
                 int count = toClientsocket.EndReceive(ar);
+                Console.WriteLine("收到消息字节数 : " + count);
 
                 //客户端退出，关闭连接
                 if (count == 0)
                 {
                     if (clientsList.Contains(toClientsocket))
                     {
-                        Console.WriteLine("客户端{0}已关闭连接", toClientsocket.RemoteEndPoint);
+                        Console.WriteLine("[客户端{0}已关闭连接]", toClientsocket.RemoteEndPoint);
                         toClientsocket.Shutdown(SocketShutdown.Both);
                         toClientsocket.Close();
                         clientsList.Remove(toClientsocket);
@@ -121,7 +114,7 @@ namespace MyServer
                     return;
                 }
 
-                Console.WriteLine("从客户端：{0}--接收到数据，解析中。。。", toClientsocket.RemoteEndPoint);
+                Console.WriteLine("[从客户端：{0}--接收到数据，解析中...]", toClientsocket.RemoteEndPoint);
 
                 rec_Message.AddCount(count);
                 //打印来自客户端的消息
@@ -130,10 +123,8 @@ namespace MyServer
                 foreach(var client in clientsList)
                 {
                     BeginSendMessagesToClient(client, msg);
-                    Console.WriteLine("已向客户端{0}发送消息：{1}", client.RemoteEndPoint, msg);
+                    Console.WriteLine("[已向客户端{0}发送消息：{1}]", client.RemoteEndPoint, msg);
                 }
-
-                //BeginSendMessagesToClient(toClientsocket, "客户端" + toClientsocket.RemoteEndPoint + "我收到了你的消息。");
 
                 //继续监听来自客户端的消息
                 toClientsocket.BeginReceive(rec_Message.Data, rec_Message.StartIndex, rec_Message.RemindSize, SocketFlags.None, ReceiveCallBack, toClientsocket);

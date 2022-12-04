@@ -51,8 +51,6 @@ namespace MyClient
 
         private void Update()
         {
-            //if (!clientSocket.Connected) return;
-
             if (messages.Count != 0)
             {
                 ShowInChatList(messages[0]);
@@ -79,6 +77,7 @@ namespace MyClient
 
             String msg = clientName + "加入频道";
             BeginSendMessagesToServer(msg);
+
             BeginReceiveMessages();
         }
 
@@ -91,7 +90,7 @@ namespace MyClient
             try
             {
                 clientSocket.Send(Message.GetBytes(msg));
-                //Console.WriteLine("{0} 发送成功!", msg);
+                
                 Debug.Log("发送成功!");
             }
             catch (Exception e)
@@ -120,16 +119,14 @@ namespace MyClient
                 if (!clientSocket.Connected) return;
 
                 int count = clientSocket.EndReceive(ar);
-                //Debug.Log("从服务端接收到数据,解析中。。。");
+                Debug.Log("收到消息字节数 : "+ count);
 
                 rec_Message.AddCount(count);
 
                 //显示服务端的消息
                 String msg = rec_Message.ReadMessage();
 
-                //StartCoroutine(ShowInChatList(msg));
                 messages.Add(msg);
-                //ShowInChatList(msg);
 
                 //继续监听来自服务端的消息
                 clientSocket.BeginReceive(rec_Message.Data, rec_Message.StartIndex, rec_Message.RemindSize, SocketFlags.None, ReceiveCallBack, null);
@@ -144,13 +141,9 @@ namespace MyClient
         {
             //显示在聊天框中
             GList chatList = chatRoomRoot.GetChild("n2").asList;
-            //GTextField gf = new GTextField();
-            //gf.text = msg;
-            //gf.textFormat.size = 20;
             GComponent gf = UIPackage.CreateObject("MyFGUI" , "MyChatBubble").asCom;
             GTextField text = gf.GetChild("n0").asTextField;
             text.text = msg;
-            //chatList.AddItemFromPool();
             chatList.AddChild(gf);
 
             if (chatList.numChildren > 0)
@@ -163,8 +156,9 @@ namespace MyClient
 
         public void EnterButtonClicked()
         {
-            GTextField gtf = enterRoomRoot.GetChild("n1").asTextField;
             Debug.Log("EnterButtonClicked");
+
+            GTextField gtf = enterRoomRoot.GetChild("n1").asTextField;
 
             if (!gtf.text.Equals(""))
             {

@@ -39,14 +39,15 @@ namespace MyServer
             {
                 if (startIndex <= 4)
                 {
-                    return "";
+                    return "发生分包";
                 }
 
+                //限制单次传输消息在缓冲区长度范围内
                 int count = BitConverter.ToInt32(data, 0);
                 if ((startIndex - 4) >= count)
                 {
                     string s = Encoding.UTF8.GetString(data, 4, count);
-                    Console.WriteLine("解析出来一条数据：" + s);
+                    Console.WriteLine("[解析得数据：]" + s);
                     Array.Copy(data, count + 4, data, 0, startIndex - 4 - count);
                     startIndex -= (count + 4);
                     return s;
@@ -56,8 +57,9 @@ namespace MyServer
                     break;
                 }
             }
-            return "";
+            return "超出缓冲区长度";
         }
+
         /// <summary>
         /// 得到数据的约定形式
         /// </summary>
@@ -69,6 +71,7 @@ namespace MyServer
             int dataLength = dataBytes.Length;
             byte[] lengthBytes = BitConverter.GetBytes(dataLength);
             byte[] Bytes = lengthBytes.Concat(dataBytes).ToArray();
+            Console.WriteLine("发出消息字节数 : " + Bytes.Length);
             return Bytes;
         }
 
